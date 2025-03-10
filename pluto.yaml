@@ -4,6 +4,23 @@
   remote_user: root
 
   tasks:
+    - name: Ensure fan2go configuration directory exists
+      ansible.builtin.file:
+        path: /etc/fan2go
+        state: directory
+        mode: u+rw,g=r,o=r
+    - name: Copy fan2go config
+      ansible.builtin.copy:
+        src: fan2go/fan2go.yaml
+        dest: /etc/fan2go/fan2go.yaml
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Ensure that fan2go service is enabled and started
+      ansible.builtin.systemd_service:
+        name: fan2go
+        state: started
+        enabled: true
     - name: Full system upgrade
       community.general.pacman:
         update_cache: true
