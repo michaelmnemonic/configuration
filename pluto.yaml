@@ -4,6 +4,17 @@
   remote_user: root
 
   tasks:
+    - name : Ensure that amd gpu can be overclocked
+      ansible.builtin.copy:
+        src: cmdline.d/overclock-amdgpu.conf
+        dest: /etc/cmdline.d
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+      register: cmdline
+    - name: Regenerate kernel UKI
+      ansible.builtin.command: mkinitcpio -p linux
+      when: cmdline.changed
     - name: Ensure fan2go configuration directory exists
       ansible.builtin.file:
         path: /etc/fan2go
