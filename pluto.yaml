@@ -61,6 +61,34 @@
     - name: Update pacman chache
       community.general.pacman:
         update_cache: true
+    - name: Ensure that unbound is present
+      community.general.pacman:
+        name: unbound
+        state: present
+    - name: Configure unbound
+      ansible.builtin.copy:
+        src: unbound/unbound.conf
+        dest: /etc/unbound
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Ensure that unbound service is enabled and started
+      ansible.builtin.systemd_service:
+        name: unbound
+        state: started
+        enabled: true
+    - name: Ensure that systemd-resolved service is disabledenabled and stopped
+      ansible.builtin.systemd_service:
+        name: systemd-resolved
+        state: stopped
+        enabled: false
+    - name: Configure resolv.conf
+      ansible.builtin.copy:
+        src: resolv.conf
+        dest: /etc/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     - name: Ensure that plasma desktop is present
       community.general.pacman:
         name:
