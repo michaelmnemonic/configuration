@@ -118,6 +118,10 @@
       community.general.pacman:
         name: sudo
         state: present
+    - name: Ensure that sbctl is present
+      community.general.pacman:
+        name: sbctl
+        state: present
     - name: Ensure that pam_mount is present
       community.general.pacman:
         name: pam_mount
