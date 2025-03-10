@@ -1,0 +1,10 @@
+---
+- name: Configure pluto
+  hosts: pluto
+  remote_user: root
+
+  tasks:
+    - name: Full system upgrade
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
