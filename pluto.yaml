@@ -122,6 +122,14 @@
       community.general.pacman:
         name: firefox
         state: present
+    - name: Ensure that syncthing is present
+      community.general.pacman:
+        name: syncthing
+        state: present
+    - name: Ensure that vscode is present
+      community.general.pacman:
+        name: code
+        state: present
     - name: Ensure that sudo is present
       community.general.pacman:
         name: sudo
