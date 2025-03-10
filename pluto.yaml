@@ -15,6 +15,17 @@
     - name: Regenerate kernel UKI
       ansible.builtin.command: mkinitcpio -p linux
       when: cmdline.changed
+    - name: Configure gpu overclock
+      ansible.builtin.copy:
+        src: tmpfiles.d/gpu-undervolt.conf
+        dest: /etc/tmpfiles.d
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+      register: gpu_undervolt
+    - name: Apply gpu overclock
+      ansible.builtin.command: systemd-tmpfiles --create /etc/tmpfiles.d/gpu-undervolt.conf
+      when: gpu_undervolt.changed
     - name: Ensure fan2go configuration directory exists
       ansible.builtin.file:
         path: /etc/fan2go
