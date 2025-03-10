@@ -50,7 +50,84 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
-    - name: Full system upgrade
+    - name: Update pacman chache
       community.general.pacman:
         update_cache: true
+    - name: Ensure that plasma desktop is present
+      community.general.pacman:
+        name:
+          - 7zip
+          - ark
+          - ark
+          - bluedevil
+          - breeze-gtk
+          - dolphin
+          - drkonqi
+          - ffmpegthumbs
+          - gwenview
+          - kate
+          - kde-cli-tools
+          - kde-gtk-config
+          - kdecoration
+          - kdegraphics-thumbnailers
+          - kdepim-addons
+          - kdeplasma-addons
+          - kgamma
+          - kimageformats
+          - kinfocenter
+          - kio-admin
+          - kleopatra
+          - kmail
+          - kmenuedit
+          - konsole
+          - kpipewire
+          - krdp
+          - kscreen
+          - kscreenlocker
+          - ksshaskpass
+          - ksystemstats
+          - kwallet-pam
+          - kwayland
+          - kwin
+          - merkuro
+          - ocean-sound-theme
+          - okular
+          - plasma-browser-integration
+          - plasma-desktop
+          - plasma-disks
+          - plasma-integration
+          - plasma-nm
+          - plasma-pa
+          - plasma-systemmonitor
+          - plasma-workspace
+          - polkit-kde-agent
+          - powerdevil
+          - print-manager
+          - spectacle
+          - systemsettings
+          - tokodon
+          - qqc2-breeze-style
+          - unrar
+          - xdg-desktop-portal-kde
+        state: present
+    - name: Ensure that firefox is present
+      community.general.pacman:
+        name: firefox
+        state: present
+    - name: Ensure that sudo is present
+      community.general.pacman:
+        name: sudo
+        state: present
+    - name: Ensure that pam_mount is present
+      community.general.pacman:
+        name: pam_mount
+        state: present
+    - name: Ensure that fonts are present
+      community.general.pacman:
+        name:
+          - inter-font
+          - ttf-jetbrains-mono
+        state: present
+    - name: Full system upgrade
+      community.general.pacman:
         upgrade: true
