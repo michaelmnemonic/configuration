@@ -1,0 +1,1 @@
+root=/dev/disk/by-partlabel/DEBIAN rootfstype=btrfs rootfsflags=compress=zstd:1 amdgpu.ppfeaturemask=0xfff7ffff rw

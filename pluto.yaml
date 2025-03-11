@@ -4,178 +4,170 @@
   remote_user: root
 
   tasks:
-    - name : Ensure that boot is quiet
+    - name : Set kernel command line
       ansible.builtin.copy:
-        src: cmdline.d/quiet.conf
-        dest: /etc/cmdline.d
+        src: etc/kernel/cmdline
+        dest: /etc/kernel/cmdline
         owner: root
         group: root
         mode: u+rw,g=r,o=r
-      register: quiet
-    - name : Ensure that amd gpu can be overclocked
-      ansible.builtin.copy:
-        src: cmdline.d/overclock-amdgpu.conf
-        dest: /etc/cmdline.d
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-      register: overclock
+      register: cmdline
     - name: Regenerate kernel UKI
-      ansible.builtin.command: mkinitcpio -p linux
-      when: quiet.changed or overclock.changed
-    - name: Configure gpu overclock
-      ansible.builtin.copy:
-        src: tmpfiles.d/gpu-undervolt.conf
-        dest: /etc/tmpfiles.d
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-      register: gpu_undervolt
-    - name: Apply gpu overclock
-      ansible.builtin.command: systemd-tmpfiles --create /etc/tmpfiles.d/gpu-undervolt.conf
-      when: gpu_undervolt.changed
-    - name: Ensure fan2go configuration directory exists
-      ansible.builtin.file:
-        path: /etc/fan2go
-        state: directory
-        mode: u+rw,g=r,o=r
-    - name: Copy fan2go config
-      ansible.builtin.copy:
-        src: fan2go/fan2go.yaml
-        dest: /etc/fan2go/fan2go.yaml
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-    - name: Ensure that fan2go service is enabled and started
-      ansible.builtin.systemd_service:
-        name: fan2go
-        state: started
-        enabled: true
-    - name: Ensure that kernel module for motherboard sensors are loaded on boot
-      ansible.builtin.copy:
-        src: modules-load.d/motherboard-sensors.conf
-        dest: /etc/modules-load.d/
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-    - name: Update pacman chache
-      community.general.pacman:
-        update_cache: true
-    - name: Ensure that unbound is present
-      community.general.pacman:
-        name: unbound
-        state: present
-    - name: Configure unbound
-      ansible.builtin.copy:
-        src: unbound/unbound.conf
-        dest: /etc/unbound
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-    - name: Ensure that unbound service is enabled and started
-      ansible.builtin.systemd_service:
-        name: unbound
-        state: started
-        enabled: true
-    - name: Ensure that systemd-resolved service is disabledenabled and stopped
-      ansible.builtin.systemd_service:
-        name: systemd-resolved
-        state: stopped
-        enabled: false
-    - name: Configure resolv.conf
-      ansible.builtin.copy:
-        src: resolv.conf
-        dest: /etc/
-        owner: root
-        group: root
-        mode: u+rw,g=r,o=r
-    - name: Ensure that plasma desktop is present
-      community.general.pacman:
-        name:
-          - 7zip
-          - ark
-          - ark
-          - bluedevil
-          - breeze-gtk
-          - dolphin
-          - drkonqi
-          - ffmpegthumbs
-          - gwenview
-          - kate
-          - kde-cli-tools
-          - kde-gtk-config
-          - kdecoration
-          - kdegraphics-thumbnailers
-          - kdepim-addons
-          - kdeplasma-addons
-          - kgamma
-          - kimageformats
-          - kinfocenter
-          - kio-admin
-          - kleopatra
-          - kmail
-          - kmenuedit
-          - konsole
-          - kpipewire
-          - krdp
-          - kscreen
-          - kscreenlocker
-          - ksshaskpass
-          - ksystemstats
-          - kwallet-pam
-          - kwayland
-          - kwin
-          - merkuro
-          - ocean-sound-theme
-          - okular
-          - plasma-browser-integration
-          - plasma-desktop
-          - plasma-disks
-          - plasma-integration
-          - plasma-nm
-          - plasma-pa
-          - plasma-systemmonitor
-          - plasma-workspace
-          - polkit-kde-agent
-          - powerdevil
-          - print-manager
-          - spectacle
-          - systemsettings
-          - tokodon
-          - qqc2-breeze-style
-          - unrar
-          - xdg-desktop-portal-kde
-        state: present
-    - name: Ensure that firefox is present
-      community.general.pacman:
-        name: firefox
-        state: present
-    - name: Ensure that syncthing is present
-      community.general.pacman:
-        name: syncthing
-        state: present
-    - name: Ensure that vscode is present
-      community.general.pacman:
-        name: code
-        state: present
-    - name: Ensure that sudo is present
-      community.general.pacman:
-        name: sudo
-        state: present
-    - name: Ensure that sbctl is present
-      community.general.pacman:
-        name: sbctl
-        state: present
-    - name: Ensure that pam_mount is present
-      community.general.pacman:
-        name: pam_mount
-        state: present
-    - name: Ensure that fonts are present
-      community.general.pacman:
-        name:
-          - inter-font
-          - ttf-jetbrains-mono
-        state: present
-    - name: Full system upgrade
-      community.general.pacman:
-        upgrade: true
+      ansible.builtin.command: update-initramfs -u
+    #   when: quiet.changed or overclock.changed
+    # - name: Configure gpu overclock
+    #   ansible.builtin.copy:
+    #     src: tmpfiles.d/gpu-undervolt.conf
+    #     dest: /etc/tmpfiles.d
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g=r,o=r
+    #   register: gpu_undervolt
+    # - name: Apply gpu overclock
+    #   ansible.builtin.command: systemd-tmpfiles --create /etc/tmpfiles.d/gpu-undervolt.conf
+    #   when: gpu_undervolt.changed
+    # - name: Ensure fan2go configuration directory exists
+    #   ansible.builtin.file:
+    #     path: /etc/fan2go
+    #     state: directory
+    #     mode: u+rw,g=r,o=r
+    # - name: Copy fan2go config
+    #   ansible.builtin.copy:
+    #     src: fan2go/fan2go.yaml
+    #     dest: /etc/fan2go/fan2go.yaml
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g=r,o=r
+    # - name: Ensure that fan2go service is enabled and started
+    #   ansible.builtin.systemd_service:
+    #     name: fan2go
+    #     state: started
+    #     enabled: true
+    # - name: Ensure that kernel module for motherboard sensors are loaded on boot
+    #   ansible.builtin.copy:
+    #     src: modules-load.d/motherboard-sensors.conf
+    #     dest: /etc/modules-load.d/
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g=r,o=r
+    # - name: Update pacman chache
+    #   community.general.pacman:
+    #     update_cache: true
+    # - name: Ensure that unbound is present
+    #   community.general.pacman:
+    #     name: unbound
+    #     state: present
+    # - name: Configure unbound
+    #   ansible.builtin.copy:
+    #     src: unbound/unbound.conf
+    #     dest: /etc/unbound
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g=r,o=r
+    # - name: Ensure that unbound service is enabled and started
+    #   ansible.builtin.systemd_service:
+    #     name: unbound
+    #     state: started
+    #     enabled: true
+    # - name: Ensure that systemd-resolved service is disabledenabled and stopped
+    #   ansible.builtin.systemd_service:
+    #     name: systemd-resolved
+    #     state: stopped
+    #     enabled: false
+    # - name: Configure resolv.conf
+    #   ansible.builtin.copy:
+    #     src: resolv.conf
+    #     dest: /etc/
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g=r,o=r
+    # - name: Ensure that plasma desktop is present
+    #   community.general.pacman:
+    #     name:
+    #       - 7zip
+    #       - ark
+    #       - ark
+    #       - bluedevil
+    #       - breeze-gtk
+    #       - dolphin
+    #       - drkonqi
+    #       - ffmpegthumbs
+    #       - gwenview
+    #       - kate
+    #       - kde-cli-tools
+    #       - kde-gtk-config
+    #       - kdecoration
+    #       - kdegraphics-thumbnailers
+    #       - kdepim-addons
+    #       - kdeplasma-addons
+    #       - kgamma
+    #       - kimageformats
+    #       - kinfocenter
+    #       - kio-admin
+    #       - kleopatra
+    #       - kmail
+    #       - kmenuedit
+    #       - konsole
+    #       - kpipewire
+    #       - krdp
+    #       - kscreen
+    #       - kscreenlocker
+    #       - ksshaskpass
+    #       - ksystemstats
+    #       - kwallet-pam
+    #       - kwayland
+    #       - kwin
+    #       - merkuro
+    #       - ocean-sound-theme
+    #       - okular
+    #       - plasma-browser-integration
+    #       - plasma-desktop
+    #       - plasma-disks
+    #       - plasma-integration
+    #       - plasma-nm
+    #       - plasma-pa
+    #       - plasma-systemmonitor
+    #       - plasma-workspace
+    #       - polkit-kde-agent
+    #       - powerdevil
+    #       - print-manager
+    #       - spectacle
+    #       - systemsettings
+    #       - tokodon
+    #       - qqc2-breeze-style
+    #       - unrar
+    #       - xdg-desktop-portal-kde
+    #     state: present
+    # - name: Ensure that firefox is present
+    #   community.general.pacman:
+    #     name: firefox
+    #     state: present
+    # - name: Ensure that syncthing is present
+    #   community.general.pacman:
+    #     name: syncthing
+    #     state: present
+    # - name: Ensure that vscode is present
+    #   community.general.pacman:
+    #     name: code
+    #     state: present
+    # - name: Ensure that sudo is present
+    #   community.general.pacman:
+    #     name: sudo
+    #     state: present
+    # - name: Ensure that sbctl is present
+    #   community.general.pacman:
+    #     name: sbctl
+    #     state: present
+    # - name: Ensure that pam_mount is present
+    #   community.general.pacman:
+    #     name: pam_mount
+    #     state: present
+    # - name: Ensure that fonts are present
+    #   community.general.pacman:
+    #     name:
+    #       - inter-font
+    #       - ttf-jetbrains-mono
+    #     state: present
+    # - name: Full system upgrade
+    #   community.general.pacman:
+    #     upgrade: true
