@@ -14,7 +14,7 @@
       register: cmdline
     - name: Regenerate kernel UKI
       ansible.builtin.command: update-initramfs -u
-    #   when: quiet.changed or overclock.changed
+      when: cmdline.changed
     # - name: Configure gpu overclock
     #   ansible.builtin.copy:
     #     src: tmpfiles.d/gpu-undervolt.conf
