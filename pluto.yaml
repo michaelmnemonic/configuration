@@ -157,10 +157,21 @@
     #   community.general.pacman:
     #     name: sbctl
     #     state: present
+    - name: Ensure that sudo is present
+      ansible.builtin.apt:
+        name: sudo
+        state: present
     - name: Ensure that pam_mount is present
       ansible.builtin.apt:
         name: libpam-mount
         state: present
+    - name: Ensure that pam_mount is configured
+      ansible.builtin.copy:
+        src: etc/security/pam_mount.conf.xml
+        dest: /etc/security/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     # - name: Ensure that fonts are present
     #   community.general.pacman:
     #     name:
