@@ -7,7 +7,7 @@
     - name : Set kernel command line
       ansible.builtin.copy:
         src: etc/kernel/cmdline
-        dest: /etc/kernel/cmdline
+        dest: /etc/kernel/
         owner: root
         group: root
         mode: u+rw,g=r,o=r
@@ -18,7 +18,7 @@
     - name: Configure gpu overclock
       ansible.builtin.copy:
         src: etc/tmpfiles.d/gpu-undervolt.conf
-        dest: /etc/tmpfiles.d/gpu-undervolt.conf
+        dest: /etc/tmpfiles.d/
         owner: root
         group: root
         mode: u+rw,g=r,o=r
@@ -34,7 +34,7 @@
     - name: Copy fan2go config
       ansible.builtin.copy:
         src: etc/fan2go/fan2go.yaml
-        dest: /etc/fan2go/fan2go.yaml
+        dest: /etc/fan2go/
         owner: root
         group: root
         mode: u+rw,g=r,o=r
