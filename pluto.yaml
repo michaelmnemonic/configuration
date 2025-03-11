@@ -81,8 +81,7 @@
     #     owner: root
     #     group: root
     #     mode: u+rw,g=r,o=r
-    # - name: Ensure that plasma desktop is present
-    #   community.general.pacman:
+
     #     name:
     #       - 7zip
     #       - ark
@@ -158,10 +157,10 @@
     #   community.general.pacman:
     #     name: sbctl
     #     state: present
-    # - name: Ensure that pam_mount is present
-    #   community.general.pacman:
-    #     name: pam_mount
-    #     state: present
+    - name: Ensure that pam_mount is present
+      ansible.builtin.apt:
+        name: libpam-mount
+        state: present
     # - name: Ensure that fonts are present
     #   community.general.pacman:
     #     name:
