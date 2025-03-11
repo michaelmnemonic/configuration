@@ -40,12 +40,17 @@
         mode: u+rw,g=r,o=r
     - name: Configure openssh
       ansible.builtin.copy:
-        src: etc/ssh/sshd_config/
-        dest: /etc/ssh/sshd_config/
+        src: etc/ssh/sshd_config.d/
+        dest: /etc/ssh/sshd_config.d/
         owner: root
         group: root
         mode: u+rw,g=r,o=r
       register: sshd_config
+    - name: Restart SSH service if config changed
+      ansible.builtin.systemd:
+        name: sshd
+        state: restarted
+      when: sshd_config.changed
     # - name: Ensure that fan2go service is enabled and started
     #   ansible.builtin.systemd_service:
     #     name: fan2go
