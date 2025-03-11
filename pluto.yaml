@@ -218,6 +218,10 @@
           - konsole
           - okular
         state: present
+    - name: Ensure that syncthing is present
+      ansible.builtin.apt:
+        name: syncthing
+        state: present
     - name: Remove "foo" package
       ansible.builtin.apt:
         name:
