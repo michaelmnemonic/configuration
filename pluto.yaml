@@ -196,6 +196,7 @@
       ansible.builtin.apt:
         name:
           - kde-style-oxygen-qt6
+          - sddm-theme-debian-breeze
         state: absent
     # - name: Ensure that fonts are present
     #   community.general.pacman:
