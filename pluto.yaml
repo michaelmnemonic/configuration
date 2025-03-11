@@ -186,6 +186,12 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Ensure that plasma desktop environemnt is present
+      ansible.builtin.apt:
+        name:
+          - kde-plasma-desktop
+          - konsole
+        state: present
     # - name: Ensure that fonts are present
     #   community.general.pacman:
     #     name:
