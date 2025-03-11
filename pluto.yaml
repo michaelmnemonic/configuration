@@ -45,7 +45,7 @@
     #     enabled: true
     - name: Ensure that kernel module for motherboard sensors are loaded on boot
       ansible.builtin.copy:
-        src: /etc/modules-load.d/motherboard-sensors.conf
+        src: etc/modules-load.d/motherboard-sensors.conf
         dest: /etc/modules-load.d/
         owner: root
         group: root
