@@ -63,9 +63,10 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
-    # - name: Update pacman chache
-    #   community.general.pacman:
-    #     update_cache: true
+    - name: Update APT cache if not too recent
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
     # - name: Ensure that unbound is present
     #   community.general.pacman:
     #     name: unbound
