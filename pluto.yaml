@@ -215,6 +215,7 @@
         name:
           - kde-plasma-desktop
           - konsole
+          - okular
         state: present
     - name: Remove "foo" package
       ansible.builtin.apt:
