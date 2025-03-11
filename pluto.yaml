@@ -222,7 +222,7 @@
       ansible.builtin.apt:
         name: syncthing
         state: present
-    - name: Remove "foo" package
+    - name: Debloat kde install
       ansible.builtin.apt:
         name:
           - kde-style-oxygen-qt6
