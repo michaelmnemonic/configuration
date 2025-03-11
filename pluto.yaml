@@ -193,6 +193,12 @@
       ansible.builtin.apt:
         name: sbsigntool
         state: present
+    - name: Ensure that plymouth is present
+      ansible.builtin.apt:
+        name:
+          - plymouth
+          - plymouth-themes
+        state: present
     - name: Ensure that pam_mount is present
       ansible.builtin.apt:
         name: libpam-mount
