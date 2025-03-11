@@ -192,6 +192,11 @@
           - kde-plasma-desktop
           - konsole
         state: present
+    - name: Remove "foo" package
+      ansible.builtin.apt:
+        name:
+          - kde-style-oxygen-qt6
+        state: absent
     # - name: Ensure that fonts are present
     #   community.general.pacman:
     #     name:
