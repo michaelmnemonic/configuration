@@ -15,6 +15,20 @@
     - name: Regenerate kernel UKI
       ansible.builtin.command: update-initramfs -u
       when: cmdline.changed
+    - name : Configure uki (post-update)
+      ansible.builtin.copy:
+        src: etc/initramfs/post-update.d/
+        dest: /etc/initramfs/post-update.d/
+        owner: root
+        group: root
+        mode: u+rwx,g=r,o=r
+    - name : Configure uki (post-install)
+      ansible.builtin.copy:
+        src: etc/kernel/postinst.d/
+        dest: /etc/kernel/postinst.d/
+        owner: root
+        group: root
+        mode: u+rwx,g=r,o=r
     - name: Configure gpu overclock
       ansible.builtin.copy:
         src: etc/tmpfiles.d/gpu-undervolt.conf
@@ -174,6 +188,10 @@
     - name: Ensure that sudo is present
       ansible.builtin.apt:
         name: sudo
+        state: present
+    - name: Ensure that sbsigntool is present
+      ansible.builtin.apt:
+        name: sbsigntool
         state: present
     - name: Ensure that pam_mount is present
       ansible.builtin.apt:

@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+/usr/lib/systemd/ukify build \
+    --linux="/boot/vmlinuz-$1" \
+    --initrd="$2" \
+    --cmdline="@/etc/kernel/cmdline" \
+    --secureboot-private-key=/etc/kernel/secure-boot-private-key.pem \
+    --secureboot-certificate=/etc/kernel/secure-boot-certificate.pem \
+    --output="/boot/efi/debian.efi"
