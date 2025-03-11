@@ -213,6 +213,7 @@
     - name: Ensure that plasma desktop environemnt is present
       ansible.builtin.apt:
         name:
+          - gwenview
           - kde-plasma-desktop
           - konsole
           - okular
