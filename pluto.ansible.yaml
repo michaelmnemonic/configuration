@@ -56,37 +56,25 @@
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
-    - name: Ensure that sudo is present
-      ansible.builtin.apt:
-        name: sudo
-        state: present
-    - name: Ensure that plymouth is present
-      ansible.builtin.apt:
-        name:
-          - plymouth
-          - plymouth-themes
-        state: present
-      ignore_errors: true
-    - name: Ensure that plasma desktop environemnt is present
+    - name: Ensure that expected packages are present
       ansible.builtin.apt:
         name:
           - akonadi-backend-sqlite
+          - bash-completion
           - firefox-esr
           - gwenview
+          - kalendar
           - kde-plasma-desktop
           - kdepim-addons
           - kmail
           - konsole
-          - kalendar
           - okular
+          - plymouth
+          - plymouth-themes
+          - sudo
+          - syncthing
         state: present
-      ignore_errors: true
-    - name: Ensure that syncthing is present
-      ansible.builtin.apt:
-        name: syncthing
-        state: present
-      ignore_errors: true
-    - name: Debloat kde install
+    - name: Debloat install
       ansible.builtin.apt:
         name:
           - kde-style-oxygen-qt6
