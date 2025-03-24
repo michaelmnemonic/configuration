@@ -66,6 +66,11 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Add the user 'maik'
+      ansible.builtin.user:
+        name: maik
+        uid: 1000
+        group: sudo
     - name: Setup debian apt list
       ansible.builtin.copy:
         src: etc/apt/sources.list.d/
