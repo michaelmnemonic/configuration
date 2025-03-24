@@ -52,6 +52,17 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Setup debian apt list
+      ansible.builtin.copy:
+        src: etc/apt/sources.list.d/
+        dest: /etc/apt/sources.list.d/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: /etc/apt/sources.list
+        state: absent
     - name: Update APT cache if not too recent
       ansible.builtin.apt:
         update_cache: yes
