@@ -62,6 +62,7 @@
           - akonadi-backend-sqlite
           - bash-completion
           - firefox-esr
+          - firefox-esr-l10n-de
           - gwenview
           - kalendar
           - kde-plasma-desktop
