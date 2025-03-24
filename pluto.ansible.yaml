@@ -60,6 +60,7 @@
       ansible.builtin.apt:
         name:
           - akonadi-backend-sqlite
+          - ansible-core
           - aspell-de
           - bash-completion
           - firefox-esr
