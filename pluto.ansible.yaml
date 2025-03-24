@@ -27,6 +27,13 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Copy fan2go service
+      ansible.builtin.copy:
+        src: etc/systemd/system/
+        dest: /etc/systemd/system/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     - name: Configure openssh
       ansible.builtin.copy:
         src: etc/ssh/sshd_config.d/
@@ -47,11 +54,11 @@
         owner: root
         group: root
         mode: u+rwx,g=r,o=r
-    # - name: Ensure that fan2go service is enabled and started
-    #   ansible.builtin.systemd_service:
-    #     name: fan2go
-    #     state: started
-    #     enabled: true
+    - name: Ensure that fan2go service is enabled and started
+      ansible.builtin.systemd_service:
+        name: fan2go
+        state: started
+        enabled: true
     - name: Ensure that kernel module for motherboard sensors are loaded on boot
       ansible.builtin.copy:
         src: etc/modules-load.d/motherboard-sensors.conf
