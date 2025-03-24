@@ -69,6 +69,7 @@
           - kdepim-addons
           - kmail
           - konsole
+          - libpam-fscrypt
           - okular
           - plymouth
           - plymouth-themes
