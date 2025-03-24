@@ -1,0 +1,95 @@
+---
+- name: Configure pluto
+  hosts: pluto
+  remote_user: root
+
+  tasks:
+    - name: Configure gpu overclock
+      ansible.builtin.copy:
+        src: etc/tmpfiles.d/gpu-undervolt.conf
+        dest: /etc/tmpfiles.d/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+      register: gpu_undervolt
+    - name: Apply gpu overclock
+      ansible.builtin.command: systemd-tmpfiles --create /etc/tmpfiles.d/gpu-undervolt.conf
+      when: gpu_undervolt.changed
+    - name: Ensure fan2go configuration directory exists
+      ansible.builtin.file:
+        path: /etc/fan2go
+        state: directory
+        mode: u+rw,g=r,o=r
+    - name: Copy fan2go config
+      ansible.builtin.copy:
+        src: etc/fan2go/fan2go.yaml
+        dest: /etc/fan2go/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Configure openssh
+      ansible.builtin.copy:
+        src: etc/ssh/sshd_config.d/
+        dest: /etc/ssh/sshd_config.d/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+      register: sshd_config
+    - name: Restart SSH service if config changed
+      ansible.builtin.systemd:
+        name: sshd
+        state: restarted
+      when: sshd_config.changed
+    # - name: Ensure that fan2go service is enabled and started
+    #   ansible.builtin.systemd_service:
+    #     name: fan2go
+    #     state: started
+    #     enabled: true
+    - name: Ensure that kernel module for motherboard sensors are loaded on boot
+      ansible.builtin.copy:
+        src: etc/modules-load.d/motherboard-sensors.conf
+        dest: /etc/modules-load.d/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Update APT cache if not too recent
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Ensure that sudo is present
+      ansible.builtin.apt:
+        name: sudo
+        state: present
+    - name: Ensure that plymouth is present
+      ansible.builtin.apt:
+        name:
+          - plymouth
+          - plymouth-themes
+        state: present
+      ignore_errors: true
+    - name: Ensure that plasma desktop environemnt is present
+      ansible.builtin.apt:
+        name:
+          - akonadi-backend-sqlite
+          - firefox-esr
+          - gwenview
+          - kde-plasma-desktop
+          - kdepim-addons
+          - kmail
+          - konsole
+          - kalendar
+          - okular
+        state: present
+      ignore_errors: true
+    - name: Ensure that syncthing is present
+      ansible.builtin.apt:
+        name: syncthing
+        state: present
+      ignore_errors: true
+    - name: Debloat kde install
+      ansible.builtin.apt:
+        name:
+          - kde-style-oxygen-qt6
+          - sddm-theme-debian-breeze
+        state: absent
+      ignore_errors: true

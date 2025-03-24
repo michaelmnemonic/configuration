@@ -1,0 +1,1 @@
+root=/dev/mapper/DEBIAN rootfstype=btrfs rootfsflags=compress=zstd:1 amdgpu.ppfeaturemask=0xfff7ffff amd_pstate=active quiet loglevel=0 vt.global_cursor_default=0 systemd.show_status=auto rd.udev.log_level=3 splash rw
