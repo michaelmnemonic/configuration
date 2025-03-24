@@ -81,6 +81,7 @@
     - name: Debloat install
       ansible.builtin.apt:
         name:
+          - kde-style-oxygen-qt5
           - kde-style-oxygen-qt6
           - sddm-theme-debian-breeze
         state: absent
