@@ -40,6 +40,13 @@
         name: sshd
         state: restarted
       when: sshd_config.changed
+    - name: Install fan2go
+      ansible.builtin.copy:
+        src: usr/bin/
+        dest: /usr/bin/
+        owner: root
+        group: root
+        mode: u+rwx,g=r,o=r
     # - name: Ensure that fan2go service is enabled and started
     #   ansible.builtin.systemd_service:
     #     name: fan2go
