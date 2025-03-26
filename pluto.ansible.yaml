@@ -43,6 +43,20 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Configure pipewire
+      ansible.builtin.copy:
+        src: etc/pipewire/
+        dest: /etc/pipewire/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Configure wireplumber
+      ansible.builtin.copy:
+        src: etc/wireplumber/
+        dest: /etc/wireplumber/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     - name: Ensure fan2go configuration directory exists
       ansible.builtin.file:
         path: /etc/fan2go
