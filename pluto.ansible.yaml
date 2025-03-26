@@ -132,16 +132,18 @@
           - binutils
           - firefox-esr
           - firefox-esr-l10n-de
-          - gawk
-          - gwenview
-          - merkuro
           - fonts-inter
           - fonts-inter-variable
+          - fonts-wine
+          - gawk
+          - gwenview
           - kde-plasma-desktop
           - kdepim-addons
           - kmail
           - konsole
           - libpam-fscrypt
+          - libwine
+          - merkuro
           - neochat
           - okular
           - plymouth
@@ -150,6 +152,8 @@
           - syncthing
           - systemd-boot-efi
           - tokodon
+          - wine
+          - wine64
         state: present
     - name: Debloat install
       ansible.builtin.apt:
