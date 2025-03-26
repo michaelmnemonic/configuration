@@ -106,6 +106,13 @@
         owner: root
         group: root
         mode: u+rw,g=r,o=r
+    - name: Setup debian apt keyrings
+      ansible.builtin.copy:
+        src: etc/apt/keyrings/
+        dest: /etc/apt/keyrings/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     - name: Remove file (delete file)
       ansible.builtin.file:
         path: /etc/apt/sources.list
@@ -119,6 +126,7 @@
         name:
           - akonadi-backend-sqlite
           - ansible-core
+          - apt-transport-https
           - aspell-de
           - bash-completion
           - binutils
