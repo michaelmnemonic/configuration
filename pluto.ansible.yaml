@@ -127,6 +127,7 @@
           - gawk
           - gwenview
           - merkuro
+          - fonts-inter
           - fonts-inter-variable
           - kde-plasma-desktop
           - kdepim-addons
