@@ -1,0 +1,12 @@
+[Unit]
+Description=Mount orpheus:
+
+[Mount]
+What=orpheus:
+Where=/mnt
+Type=nfs
+TimeoutSec=10
+ForceUnmount=true
+
+[Install]
+WantedBy=multi-user.target

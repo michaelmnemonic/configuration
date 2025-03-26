@@ -99,6 +99,11 @@
         name: maik
         uid: 1000
         group: sudo
+    - name: Automount orpheus
+      ansible.builtin.systemd_service:
+        name: mnt.automount
+        state: started
+        enabled: true
     - name: Setup debian apt list
       ansible.builtin.copy:
         src: etc/apt/sources.list.d/
@@ -147,6 +152,7 @@
           - neochat
           - nfs-common
           - okular
+          - pipewire-audio
           - plymouth
           - plymouth-themes
           - sudo
