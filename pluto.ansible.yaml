@@ -4,6 +4,27 @@
   remote_user: root
 
   tasks:
+    - name: Set kernel commandline
+      ansible.builtin.copy:
+        src: etc/kernel/
+        dest: /etc/kernel/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Copy UKI creation (#1)
+      ansible.builtin.copy:
+        src: etc/kernel/postinst.d/
+        dest: /etc/kernel/postinst.d/
+        owner: root
+        group: root
+        mode: u+rwx,g=r,o=r
+    - name: Copy UKI creation (#2)
+      ansible.builtin.copy:
+        src: etc/initramfs/post-update.d/
+        dest: /etc/initramfs/post-update.d/
+        owner: root
+        group: root
+        mode: u+rwx,g=r,o=r
     - name: Configure gpu overclock
       ansible.builtin.copy:
         src: etc/tmpfiles.d/gpu-undervolt.conf
@@ -93,8 +114,10 @@
           - ansible-core
           - aspell-de
           - bash-completion
+          - binutils
           - firefox-esr
           - firefox-esr-l10n-de
+          - gawk
           - gwenview
           - kalendar
           - kde-plasma-desktop
@@ -107,6 +130,7 @@
           - plymouth-themes
           - sudo
           - syncthing
+          - systemd-boot-efi
         state: present
     - name: Debloat install
       ansible.builtin.apt:
