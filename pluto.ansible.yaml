@@ -140,6 +140,7 @@
           - sudo
           - syncthing
           - systemd-boot-efi
+          - tokodon
         state: present
     - name: Debloat install
       ansible.builtin.apt:
