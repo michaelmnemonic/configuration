@@ -16,7 +16,7 @@ else
 	kernel="$2"
 fi
 
-if [ ! -f "/etc/cmdline" ]; then
+if [ ! -f "/etc/kernel/cmdline" ]; then
 	echo "E: cmdline file /etc/kernel/cmdline doesn't exist."
 	exit 2
 fi
