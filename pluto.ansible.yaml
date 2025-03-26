@@ -162,6 +162,10 @@
           - kmail
           - konsole
           - libpam-fscrypt
+          - libreoffice-calc
+          - libreoffice-impress
+          - libreoffice-kf6
+          - libreoffice-writer
           - libwine
           - merkuro
           - neochat
