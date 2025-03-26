@@ -134,6 +134,7 @@
           - kmail
           - konsole
           - libpam-fscrypt
+          - neochat
           - okular
           - plymouth
           - plymouth-themes
