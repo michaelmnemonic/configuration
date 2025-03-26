@@ -145,6 +145,7 @@
           - libwine
           - merkuro
           - neochat
+          - nfs-common
           - okular
           - plymouth
           - plymouth-themes
