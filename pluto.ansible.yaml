@@ -36,6 +36,13 @@
     - name: Apply gpu overclock
       ansible.builtin.command: systemd-tmpfiles --create /etc/tmpfiles.d/gpu-undervolt.conf
       when: gpu_undervolt.changed
+    - name: Configure sddm
+      ansible.builtin.copy:
+        src: etc/sddm.conf.d/
+        dest: /etc/sddm.conf.d/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
     - name: Ensure fan2go configuration directory exists
       ansible.builtin.file:
         path: /etc/fan2go
