@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e
+
+if [[ -z ${1:-} ]]; then
+	echo "E: initramfs-tools: ${DPKG_MAINTSCRIPT_PACKAGE:-kernel package} did not pass a version number" >&2
+	exit 1
+else
+	version="$1"
+fi
+
+if [[ -z ${2:-} ]]; then
+	echo "E: initramfs-tools: ${DPKG_MAINTSCRIPT_PACKAGE:-kernel-package} did not pass a kernel path" >&2
+	exit 1
+else
+	kernel="$2"
+fi
+
+if [ ! -f "/etc/kernel/cmdline" ]; then
+	echo "E: cmdline file /etc/kernel/cmdline doesn't exist."
+	exit 2
+fi
+
+if ! command -v objcopy >/dev/null 2>&1; then
+	echo "E: objcopy command doesn't exist, install binutils."
+	exit 4
+fi
+
+if [ -f "/boot/efi/EFI/BOOT/BOOTAA64.efi" ]; then
+	mv /boot/efi/EFI/BOOT/BOOTAA64.efi /boot/efi/EFI/BOOT/BOOTAA64.efi.old
+fi
+
+# If an initrd is generated, the update-initramfs post-update.d script will
+# invoke kernel-install instead.
+if [[ ${INITRD:-} != No ]]; then
+	echo "I: initramfs-tools: deferring responsibility for creation of unified kernel image to update-initramfs" >&2
+	exit 0
+fi
+
+align="$(objdump -p /usr/lib/systemd/boot/efi/linuxaa64.efi.stub | awk '{ if ($1 == "SectionAlignment"){print $2} }')"
+align=$((16#$align))
+osrel_offs="$(objdump -h "/usr/lib/systemd/boot/efi/linuxaa64.efi.stub" | awk 'NF==7 {size=strtonum("0x"$3); offset=strtonum("0x"$4)} END {print size + offset}')"
+cmdline_offs=$((osrel_offs + $(stat -Lc%s "/usr/lib/os-release")))
+cmdline_offs=$((cmdline_offs + "$align" - cmdline_offs % "$align"))
+splash_offs=$((cmdline_offs + $(stat -Lc%s "/etc/kernel/cmdline")))
+splash_offs=$((splash_offs + "$align" - splash_offs % "$align"))
+initrd_offs=$((splash_offs + $(stat -Lc%s "/dev/null")))
+initrd_offs=$((initrd_offs + "$align" - initrd_offs % "$align"))
+linux_offs=$((initrd_offs + $(stat -Lc%s "/boot/initrd.img-${version}")))
+linux_offs=$((linux_offs + "$align" - linux_offs % "$align"))
+
+objcopy \
+    --add-section .osrel="/usr/lib/os-release" --change-section-vma .osrel=$(printf 0x%x $osrel_offs) \
+    --add-section .cmdline="/etc/kernel/cmdline" --change-section-vma .cmdline=$(printf 0x%x $cmdline_offs) \
+    --add-section .splash="/dev/null" --change-section-vma .splash=$(printf 0x%x $splash_offs) \
+    --add-section .initrd="/boot/initrd.img-${version}" --change-section-vma .initrd=$(printf 0x%x $initrd_offs) \
+    --add-section .linux="${kernel}" --change-section-vma .linux=$(printf 0x%x $linux_offs) \
+    "/usr/lib/systemd/boot/efi/linuxaa64.efi.stub" "/boot/efi/EFI/BOOT/BOOTAA64.efi"

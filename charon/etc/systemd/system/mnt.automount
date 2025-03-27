@@ -1,0 +1,9 @@
+[Unit]
+Description=Automount orpheus:
+
+[Automount]
+Where=/mnt
+TimeoutIdleSec=600
+
+[Install]
+WantedBy=multi-user.target

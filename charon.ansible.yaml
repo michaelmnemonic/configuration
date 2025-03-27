@@ -1,0 +1,70 @@
+---
+- name: Configure pluto
+  hosts: charon
+  remote_user: root
+
+  tasks:
+    - name: Copy ETC customization
+      ansible.builtin.copy:
+        src: charon/etc/
+        dest: /etc/
+        owner: root
+        group: root
+        mode: u+rw,g=r,o=r
+    - name: Add the user 'maik'
+      ansible.builtin.user:
+        name: maik
+        uid: 1000
+        group: sudo
+    - name: Automount orpheus
+      ansible.builtin.systemd_service:
+        name: mnt.automount
+        state: started
+        enabled: true
+    - name: Update APT cache if not too recent
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+    - name: Ensure that expected packages are present
+      ansible.builtin.apt:
+        name:
+          - akonadi-backend-sqlite
+          - ansible-core
+          - apt-transport-https
+          - aspell-de
+          - bash-completion
+          - binutils
+          - firefox-esr
+          - firefox-esr-l10n-de
+          - fonts-inter
+          - fonts-inter-variable
+          - gawk
+          - gwenview
+          - kde-plasma-desktop
+          - kdepim-addons
+          - kmail
+          - konsole
+          - libreoffice-calc
+          - libreoffice-impress
+          - libreoffice-kf6
+          - libreoffice-writer
+          - merkuro
+          - neochat
+          - nfs-common
+          - okular
+          - pipewire-audio
+          - plymouth
+          - plymouth-themes
+          - sudo
+          - syncthing
+          - systemd-boot-efi
+          - tokodon
+        state: present
+    - name: Debloat install
+      ansible.builtin.apt:
+        name:
+          - kde-style-oxygen-qt5
+          - kde-style-oxygen-qt6
+          - sddm-theme-debian-breeze
+        state: absent
+      ignore_errors: true
