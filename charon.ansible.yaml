@@ -16,6 +16,13 @@
         name: maik
         uid: 1000
         group: sudo
+    - name: Copy dotfiles for maik
+      ansible.builtin.copy:
+        src: charon/home/maik/
+        dest: /home/maik/
+        owner: maik
+        group: users
+        mode: u+rwx,g=,o=
     - name: Automount orpheus
       ansible.builtin.systemd_service:
         name: mnt.automount
