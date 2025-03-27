@@ -1,1 +1,1 @@
-root=/dev/mapper/nvme0n1p2_cryt rootfsflags=compress=zstd:1 arm64.nopauth clk_ignore_unused pd_ignore_unused rw quiet loglevel=3 rd.udev.log_level=3 splash vt.global_cursor_default=0 systemd.show_status=auto
+root=LABEL=DEBIAN rootfsflags=compress=zstd:1 arm64.nopauth clk_ignore_unused pd_ignore_unused rw quiet loglevel=3 rd.udev.log_level=3 splash vt.global_cursor_default=0 systemd.show_status=auto
